@@ -1,0 +1,5 @@
+host: 'unchama.kig.jp'
+port: '3306'
+db: 'db'
+id: 'unchama-ser'
+pw: 'unchama'

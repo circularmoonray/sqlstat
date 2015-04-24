@@ -1,0 +1,15 @@
+name: test
+main: com.github.circularmoonray.test.Test
+version: 0.0.1
+
+commands:
+  stat:
+      description: This is a demo command.
+      usage: /<command> <all>
+      permission: test.stat
+      permission-message: You don't have <permission>
+  sql:
+      description: This is a demo command.
+      usage: /<command> <reload|mine>
+      permission: test.sql
+      permission-message: You don't have <permission>

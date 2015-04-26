@@ -59,6 +59,10 @@ public class Sql{
 				"stone int default 0, " +
 				"netherrack int default 0, " +
 				"gravel int default 0, " +
+				"dirt int default 0, " +
+				"death int default 0, " +
+				"break_dPickaxe int default 0, " +
+				"use_seed int default 0, " +
 				"uuid varchar(128) unique);";
 		try{
 			stmt.execute(command);

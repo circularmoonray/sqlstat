@@ -1,5 +1,7 @@
 package com.github.circularmoonray.sqlstat;
 
+import static com.github.circularmoonray.sqlstat.Param.*;
+
 import java.util.UUID;
 
 import org.bukkit.Material;
@@ -7,10 +9,12 @@ import org.bukkit.Statistic;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
-
-public class SqlStat extends JavaPlugin {
+public class SqlStat extends JavaPlugin implements Listener {
 	private String host;
 	private String port;
 	private String db;
@@ -19,9 +23,9 @@ public class SqlStat extends JavaPlugin {
 	private Sql sql;
 	private String url;
 
-
 	@Override
 	public void onEnable(){
+		getServer().getPluginManager().registerEvents(this, this);
 		LoadConfig();
 	}
 
@@ -30,12 +34,18 @@ public class SqlStat extends JavaPlugin {
 		getLogger().info("onDisableメソッドが呼び出されたよ！！");
 	}
 
+	@EventHandler
+	public void onQuit(PlayerQuitEvent event){
+		Player player = event.getPlayer();
+		NewSql();
+		putStat(today, player);
+	}
+
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		String s = "";
 		int stat = 0;
 		boolean bool;
-		UUID uuid = null;
 
 		if (cmd.getName().equalsIgnoreCase("stat")) {
 
@@ -74,25 +84,18 @@ public class SqlStat extends JavaPlugin {
 			if(args.length > 1){
 				sender.sendMessage("引数は1つにまでにして下さい");
 				return false;
-			}else if(args.length == 1)
-			{
+				
+			}else if(args.length == 1){
 				//configのリロードオプション
 				if(args[0].equalsIgnoreCase("reload")){
 					LoadConfig();
 					NewSql();
 					return true;
+				//現在ログイン中のプレイヤーの実績をSQLに書き出し
 				}else if(args[0].equalsIgnoreCase("mine")){
 					NewSql();
 					for(Player player : this.getServer().getOnlinePlayers()){
-						uuid = player.getUniqueId();
-						s = player.getDisplayName();
-						sql.insert("today", "name", s, uuid);
-						stat = getStat(player, Material.STONE);
-						sql.insert("today", "stone", stat, uuid);
-						stat = getStat(player, Material.NETHERRACK);
-						sql.insert("today", "netherrack", stat, uuid);
-						stat = getStat(player, Material.GRAVEL);
-						sql.insert("today", "gravel", stat, uuid);
+						putStat(today, player);
 					}
 					sender.sendMessage("complete insert into 'today' of stats");
 					return true;
@@ -102,7 +105,7 @@ public class SqlStat extends JavaPlugin {
 			}
 
 			NewSql();
-			if((sql.createTable("today", "", 0))){
+			if((sql.createTable(today, "", 0))){
 				sender.sendMessage("create table");
 			}else{
 				sender.sendMessage("create table :" + Sql.exc);
@@ -121,6 +124,16 @@ public class SqlStat extends JavaPlugin {
 		Player player;
 		int stat;
 		player = (Player) sender;
+		if(material.isBlock()){
+			stat = (player).getStatistic(Statistic.MINE_BLOCK, material);
+		}else{
+			stat=0;
+		}
+
+		return stat;
+	}
+	private int getStat(Player player, Material material){
+		int stat;
 		if(material.isBlock()){
 			stat = (player).getStatistic(Statistic.MINE_BLOCK, material);
 		}else{
@@ -157,9 +170,32 @@ public class SqlStat extends JavaPlugin {
 	}
 
 
-	private boolean putStat(){
+	//掘削数をMySqlにプッシュ
+	private boolean putStat(String str, Player player){
+		UUID uuid = player.getUniqueId();
+		String s = player.getDisplayName();
+		int stat = 0;
+		sql.insert(str, "name", s, uuid);
+		stat = getStat(player, Material.STONE);
+		sql.insert(str, "stone", stat, uuid);
+		stat = getStat(player, Material.NETHERRACK);
+		sql.insert(str, "netherrack", stat, uuid);
+		stat = getStat(player, Material.DIRT);
+		sql.insert(str, "dirt", stat, uuid);
+		stat = getStat(player, Material.GRAVEL);
+		sql.insert(str, "gravel", stat, uuid);
 
+		stat = player.getStatistic(Statistic.BREAK_ITEM, Material.DIAMOND_PICKAXE);
+		sql.insert(str, "break_dPickaxe", stat, uuid);
+		stat = player.getStatistic(Statistic.USE_ITEM, Material.SEEDS);
+		sql.insert(str, "use_seed", stat, uuid);
+
+		stat = player.getStatistic(Statistic.DEATHS);
+		sql.insert(str, "death", stat, uuid);
+
+		return true;
 	}
+
 
 	//sqlオブジェクトの作成
 	private boolean NewSql(){

@@ -1,5 +1,5 @@
-name: test
-main: com.github.circularmoonray.test.Test
+name: sqlstat
+main: com.github.circularmoonray.sqlstat.SqlStat
 version: 0.0.1
 
 commands:

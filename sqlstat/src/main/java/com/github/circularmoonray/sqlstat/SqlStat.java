@@ -8,6 +8,7 @@ import org.bukkit.Material;
 import org.bukkit.Statistic;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -70,7 +71,7 @@ public class SqlStat extends JavaPlugin implements Listener {
 			}
 
 			if ((sender instanceof Player)) {
-				stat = getStat(sender, Material.STONE);
+				stat = ((Player) sender).getStatistic(Statistic.KILL_ENTITY, EntityType.ENDER_DRAGON);
 				s = String.valueOf(stat);
 				sender.sendMessage("あなたの石の掘削数:" + s);
 			} else {
@@ -84,7 +85,7 @@ public class SqlStat extends JavaPlugin implements Listener {
 			if(args.length > 1){
 				sender.sendMessage("引数は1つにまでにして下さい");
 				return false;
-				
+
 			}else if(args.length == 1){
 				//configのリロードオプション
 				if(args[0].equalsIgnoreCase("reload")){

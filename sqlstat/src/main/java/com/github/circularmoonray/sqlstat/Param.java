@@ -6,6 +6,6 @@ public class Param {
 	}
 
 	public static final String today = "today";
-	public static final String yesday = "today";
+	public static final String yesday = "yesday";
 	public static final String limit = "limit";
 }

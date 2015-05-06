@@ -10,18 +10,22 @@ import java.util.UUID;
 //MySQL操作関数
 public class Sql{
 
+	private final String url, db, id, pw;
+
 	private Connection con = null;
 	private Statement stmt = null;
-	private String command = "";
 	private ResultSet result = null;
-	final private String db;
 	public static String exc;
 	UUID uuid;
 
 
 	Sql(String url, String db, String id, String pw){
-		final String urldb = url+ "/" + db;
+		this.url = url;
 		this.db = db;
+		this.id = id;
+		this.pw = pw;
+
+		String command = "";
 		try {
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
 		} catch (InstantiationException | IllegalAccessException
@@ -31,15 +35,27 @@ public class Sql{
 
 		//sql鯖への接続とdb作成
 		connect(url, id, pw);
-		createDB(db);
-		disconnect();
-		con = null;
-		stmt = null;
 
-		//sql鯖のdbに接続
-		connect(urldb, id, pw);
+
+		//dbへの接続。失敗時には作成
+		command = "USE " + db;
+
+		try {
+			stmt.execute(command);
+		} catch (SQLException e) {
+			exc = e.getMessage();
+			createDB(db);
+			connect(url, id, pw);
+			try {
+				stmt.execute(command);
+			} catch (SQLException e1) {
+				// TODO 自動生成された catch ブロック
+				e1.printStackTrace();
+			}
+		}
 	}
 
+	//接続関数
 	private boolean connect(String url, String id, String pw){
 		try {
 			con = (Connection) DriverManager.getConnection(url, id, pw);
@@ -53,6 +69,7 @@ public class Sql{
 
 	//テーブル作成。失敗時にはエラーコードを@excに格納
 	public boolean createTable(String table, String name, int statstone){
+		String command = "";
 		command = "create table " + table +
 				"(id int auto_increment unique, " +
 				"name varchar(30), " +
@@ -76,6 +93,7 @@ public class Sql{
 
 	//テーブルにデータを追加。失敗時にはエラーコードを@excに格納
 	public boolean insert(String table, String key, int stat, UUID uuid){
+		String command = "";
 		String struuid = uuid.toString();
 		String s = String.valueOf(stat);
 
@@ -96,6 +114,7 @@ public class Sql{
 	}
 
 	public boolean insert(String table, String key, String s, UUID uuid){
+		String command = "";
 		String struuid = uuid.toString();
 
 		//command:
@@ -109,7 +128,15 @@ public class Sql{
 			stmt.executeUpdate(command);
 			return true;
 		} catch (SQLException e) {
+			//接続エラーの場合は、再度接続後、コマンド実行
 			exc = e.getMessage();
+			connect(url, id, pw);
+			try {
+				stmt.executeUpdate(command);
+			} catch (SQLException e1) {
+				// TODO 自動生成された catch ブロック
+				e1.printStackTrace();
+			}
 		}
 		return false;
 	}

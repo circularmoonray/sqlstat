@@ -22,7 +22,6 @@ public class SqlStat extends JavaPlugin implements Listener {
 		stat = new Stat(url, db, id, pw);
 
 		getServer().getPluginManager().registerEvents(this, this);
-		getServer().getPluginManager().registerEvents(new CommandSql(this), this);
 	}
 
 	@Override

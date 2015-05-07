@@ -16,7 +16,6 @@ public class Sql{
 	private Statement stmt = null;
 	private ResultSet result = null;
 	public static String exc;
-	UUID uuid;
 
 
 	Sql(String url, String db, String id, String pw){
@@ -55,7 +54,14 @@ public class Sql{
 		}
 	}
 
-	//接続関数
+	/**
+	 * 接続関数
+	 *
+	 * @param url 接続先url
+	 * @param id ユーザーID
+	 * @param pw ユーザーPW
+	 * @return
+	 */
 	private boolean connect(String url, String id, String pw){
 		try {
 			con = (Connection) DriverManager.getConnection(url, id, pw);
@@ -67,8 +73,14 @@ public class Sql{
 		return true;
 	}
 
-	//テーブル作成。失敗時にはエラーコードを@excに格納
-	public boolean createTable(String table, String name, int statstone){
+	/**
+	 * テーブル作成
+	 * 失敗時には変数excにエラーメッセージを格納
+	 *
+	 * @param table テーブル名
+	 * @return 成否
+	 */
+	public boolean createTable(String table){
 		String command = "";
 		command = "create table " + table +
 				"(id int auto_increment unique, " +
@@ -91,7 +103,16 @@ public class Sql{
 	}
 
 
-	//テーブルにデータを追加。失敗時にはエラーコードを@excに格納
+	/**
+	 * データの挿入・更新(int)
+	 * 失敗時には変数excにエラーメッセージを格納
+	 *
+	 * @param table テーブル名
+	 * @param key カラム名
+	 * @param stat 挿入するデータ
+	 * @param uuid キャラのuuid
+	 * @return 成否
+	 */
 	public boolean insert(String table, String key, int stat, UUID uuid){
 		String command = "";
 		String struuid = uuid.toString();
@@ -113,6 +134,16 @@ public class Sql{
 		return false;
 	}
 
+	/**
+	 * データの挿入・更新(string)
+	 * 失敗時には変数excにエラーメッセージを格納
+	 *
+	 * @param table テーブル名
+	 * @param key カラム名
+	 * @param s 挿入する文字列
+	 * @param uuid キャラのuuid
+	 * @return 成否
+	 */
 	public boolean insert(String table, String key, String s, UUID uuid){
 		String command = "";
 		String struuid = uuid.toString();

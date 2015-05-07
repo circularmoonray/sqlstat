@@ -2,19 +2,20 @@ package com.github.circularmoonray.sqlstat;
 
 import static com.github.circularmoonray.sqlstat.Param.*;
 
+import java.util.List;
+
 import org.bukkit.Material;
 import org.bukkit.Statistic;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Listener;
-import org.bukkit.plugin.Plugin;
 
-public class CommandSql implements Listener {
+public class CommandSql implements TabExecutor {
 	SqlStat plugin;
 
-	public CommandSql(Plugin plugin){
+	public CommandSql(SqlStat plugin){
 		this.plugin = plugin;
 	}
 
@@ -60,7 +61,9 @@ public class CommandSql implements Listener {
 			}
 			return true;
 
-		}else if(cmd.getName().equalsIgnoreCase("sql")){
+		}
+
+		if(cmd.getName().equalsIgnoreCase("sql")){
 
 			//オプションの判定
 			if(args.length > 1){
@@ -96,33 +99,12 @@ public class CommandSql implements Listener {
 		return false;
 	}
 
-	//configの読み込み
-		private boolean LoadConfig(){
-			String host;
-			String port;
 
-			String s = "";
-			plugin.getConfig().options().copyDefaults(true);
-			plugin.saveDefaultConfig();
-			plugin.reloadConfig();
-			host = plugin.getConfig().getString("host");
-			port = plugin.getConfig().getString("port");
-			plugin.db = plugin.getConfig().getString("db");
-			plugin.id = plugin.getConfig().getString("id");
-			plugin.pw = plugin.getConfig().getString("pw");
-
-			s = host + port + db + id + pw;
-			getLogger().info(s);
-
-			if(port.equalsIgnoreCase("")){
-				url = "jdbc:mysql://" + host;
-			}else{
-				url = "jdbc:mysql://" + host + ":" + port;
-			}
-
-			getLogger().info("config load completed");
-
-			return true;
-		}
+@Override
+public List<String> onTabComplete(CommandSender arg0, Command arg1,
+		String arg2, String[] arg3) {
+	// TODO 自動生成されたメソッド・スタブ
+	return null;
+	}
 
 }

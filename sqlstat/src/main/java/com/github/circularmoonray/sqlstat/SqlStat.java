@@ -9,24 +9,27 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class SqlStat extends JavaPlugin implements Listener {
-	String db;
-	private String id;
-	private String pw;
-	private String url;
+	public static SqlStat instance;
 
-	public static Stat stat;
+
+	private Stat stat;
 
 	@Override
 	public void onEnable(){
-		LoadConfig();
+		instance = this;
+		this.getConfig().options().copyDefaults(true);
+		saveDefaultConfig();
+		this.reloadConfig();
+		getLogger().info("config load completed");
+
 		stat = new Stat(url, db, id, pw);
 
-		getServer().getPluginManager().registerEvents(this, this);
+		this.getServer().getPluginManager().registerEvents(this, this);
 	}
 
 	@Override
 	public void onDisable(){
-		getLogger().info("onDisableメソッドが呼び出されたよ！！");
+		getLogger().info("Disable ");
 	}
 
 	@EventHandler
@@ -37,44 +40,17 @@ public class SqlStat extends JavaPlugin implements Listener {
 
 
 
-
-
-	//configの読み込み
-	private boolean LoadConfig(){
-		String host;
-		String port;
-
-		String s = "";
-		this.getConfig().options().copyDefaults(true);
-		saveDefaultConfig();
-		this.reloadConfig();
-		host = this.getConfig().getString("host");
-		port = this.getConfig().getString("port");
-		db = this.getConfig().getString("db");
-		id = this.getConfig().getString("id");
-		pw = this.getConfig().getString("pw");
-
-		s = host + port + db + id + pw;
-		getLogger().info(s);
-
-		if(port.equalsIgnoreCase("")){
-			url = "jdbc:mysql://" + host;
-		}else{
-			url = "jdbc:mysql://" + host + ":" + port;
-		}
-
-		getLogger().info("config load completed");
-
-		return true;
+	public Stat getStat(){
+		return stat;
 	}
 
 	//stat変数の初期化
-	public boolean NewStat(){
-		stat = new Stat(url, db, id, pw);
-		return true;
+	public Stat NewStat(){
+		return new Stat(url, db, id, pw);
 	}
 
-
-
+	public String getPluginJarFile() {
+		return this.getPluginJarFile();
+	}
 
 }

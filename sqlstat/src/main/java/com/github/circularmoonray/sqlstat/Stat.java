@@ -11,8 +11,12 @@ import org.bukkit.entity.Player;
 public class Stat {
 	private Sql sql;
 
-	Stat(String url, String  db, String  id, String  pw){
-		sql = new Sql(url, db, id, pw);
+	Stat(Config config){
+
+		sql = new Sql(config.getURL(),
+				config.getDB(),
+				config.getID(),
+				config.getPW());
 	}
 
 	//掘削数を表示
@@ -21,38 +25,38 @@ public class Stat {
 	}
 
 	public int getStat(Player player, Material material){
-		int stat;
+		int istat;
 		if(material.isBlock()){
-			stat = (player).getStatistic(Statistic.MINE_BLOCK, material);
+			istat = (player).getStatistic(Statistic.MINE_BLOCK, material);
 		}else{
-			stat=0;
+			istat=0;
 		}
 
-		return stat;
+		return istat;
 	}
 
 	//掘削数をMySqlにプッシュ
 	public boolean putMine(String str, Player player){
 		UUID uuid = player.getUniqueId();
 		String s = player.getDisplayName();
-		int stat = 0;
+		int istat = 0;
 		sql.insert(str, "name", s, uuid);
-		stat = getStat(player, Material.STONE);
-		sql.insert(str, "stone", stat, uuid);
-		stat = getStat(player, Material.NETHERRACK);
-		sql.insert(str, "netherrack", stat, uuid);
-		stat = getStat(player, Material.DIRT);
-		sql.insert(str, "dirt", stat, uuid);
-		stat = getStat(player, Material.GRAVEL);
-		sql.insert(str, "gravel", stat, uuid);
+		istat = getStat(player, Material.STONE);
+		sql.insert(str, "stone", istat, uuid);
+		istat = getStat(player, Material.NETHERRACK);
+		sql.insert(str, "netherrack", istat, uuid);
+		istat = getStat(player, Material.DIRT);
+		sql.insert(str, "dirt", istat, uuid);
+		istat = getStat(player, Material.GRAVEL);
+		sql.insert(str, "gravel", istat, uuid);
 
-		stat = player.getStatistic(Statistic.BREAK_ITEM, Material.DIAMOND_PICKAXE);
-		sql.insert(str, "break_dPickaxe", stat, uuid);
-		stat = player.getStatistic(Statistic.USE_ITEM, Material.SEEDS);
-		sql.insert(str, "use_seed", stat, uuid);
+		istat = player.getStatistic(Statistic.BREAK_ITEM, Material.DIAMOND_PICKAXE);
+		sql.insert(str, "break_dPickaxe", istat, uuid);
+		istat = player.getStatistic(Statistic.USE_ITEM, Material.SEEDS);
+		sql.insert(str, "use_seed", istat, uuid);
 
-		stat = player.getStatistic(Statistic.DEATHS);
-		sql.insert(str, "death", stat, uuid);
+		istat = player.getStatistic(Statistic.DEATHS);
+		sql.insert(str, "death", istat, uuid);
 
 		return true;
 	}

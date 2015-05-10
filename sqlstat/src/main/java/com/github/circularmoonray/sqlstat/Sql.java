@@ -35,7 +35,6 @@ public class Sql{
 		//sql鯖への接続とdb作成
 		connect(url, id, pw);
 
-
 		//dbへの接続。失敗時には作成
 		command = "USE " + db;
 
@@ -172,6 +171,11 @@ public class Sql{
 		return false;
 	}
 
+	/**
+	 * コネクション切断処理
+	 *
+	 * @return 成否
+	 */
 	public boolean disconnect(){
 	    if (con != null){
 	    	try{

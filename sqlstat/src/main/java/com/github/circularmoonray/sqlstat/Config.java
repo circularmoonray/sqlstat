@@ -9,10 +9,9 @@ public class Config {
 	private String id;
 	private String pw;
 	private String url;
-	private File configFile;
 
 	Config(){
-
+		url = "jdbc:mysql://";
 	}
 
 	public String getDB(){
@@ -31,11 +30,32 @@ public class Config {
 		return url;
 	}
 
-	public Config loadConfig(){
+	public static Config loadConfig(){
+		Config tconfig = new Config();
 
+		//ファイル位置の取得
 		File configFile = new File(SqlStat.instance.getDataFolder(), "config.yml");
+
+		//存在しない場合はコピー
+		if ( !configFile.exists() ) {
+			SqlStat.instance.getConfig().options().copyDefaults(true);
+			SqlStat.instance.saveConfig();
+			SqlStat.instance.reloadConfig();
+		}
+
+		//コンフィグファイルの取得
 		YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
 
+		tconfig.db = config.getString("db");
+		tconfig.id = config.getString("id");
+		tconfig.pw = config.getString("pw");
+
+		tconfig.url += config.getString("host");
+		if(!config.getString("port").isEmpty()){
+			tconfig.url += ":" + config.getString("port");
+		}
+
+		return tconfig;
 	}
 
 }

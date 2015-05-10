@@ -16,7 +16,6 @@ public class CSql implements TabExecutor {
 		this.plugin = plugin;
 	}
 
-
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		Stat stat = plugin.getStat();
@@ -28,29 +27,27 @@ public class CSql implements TabExecutor {
 				sender.sendMessage("引数は1つにまでにして下さい");
 				return false;
 
+			//configのリロードオプション
 			}else if(args.length == 1){
-				//configのリロードオプション
 				if(args[0].equalsIgnoreCase("reload")){
-					LoadConfig();
-
+					Config.loadConfig();
 					sender.sendMessage("reload completed");
 					return true;
 
+				//現在ログイン中のプレイヤーの実績をSQLに書き出し
 				}else if(args[0].equalsIgnoreCase("mine")){
-					//現在ログイン中のプレイヤーの実績をSQLに書き出し
-
 					for(Player player : plugin.getServer().getOnlinePlayers()){
 						stat.putMine(today, player);
 					}
 					sender.sendMessage("complete insert and update into 'today' of stats");
 					return true;
+
 				}else{
 					return false;
 				}
 			}
 
 			sender.sendMessage("sql restart");
-
 			return true;
 		}
 

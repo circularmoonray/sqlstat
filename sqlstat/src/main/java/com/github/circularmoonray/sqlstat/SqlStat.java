@@ -2,6 +2,11 @@ package com.github.circularmoonray.sqlstat;
 
 import static com.github.circularmoonray.sqlstat.Param.*;
 
+import java.util.HashMap;
+
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -11,20 +16,32 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class SqlStat extends JavaPlugin implements Listener {
 	public static SqlStat instance;
 
+	private Config config;
+	private HashMap<String, TabExecutor> commands;
 
-	private Stat stat;
+	public Stat stat;
 
 	@Override
 	public void onEnable(){
 		instance = this;
-		this.getConfig().options().copyDefaults(true);
-		saveDefaultConfig();
-		this.reloadConfig();
+
+		//コンフィグのロード
+		config = Config.loadConfig();
+		stat = new Stat(config);
 		getLogger().info("config load completed");
 
-		stat = new Stat(url, db, id, pw);
+		//コマンドの登録
+		commands = new HashMap<String, TabExecutor>();
+		commands.put("sql", new CSql(this));
+		commands.put("stat", new CStat(this));
 
+		//リスナーの登録
 		this.getServer().getPluginManager().registerEvents(this, this);
+	}
+
+	@Override
+	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args){
+		return commands.get(cmd.getName()).onCommand(sender, cmd, label, args);
 	}
 
 	@Override
@@ -38,19 +55,12 @@ public class SqlStat extends JavaPlugin implements Listener {
 		stat.putMine(today, player);
 	}
 
-
-
 	public Stat getStat(){
 		return stat;
 	}
 
-	//stat変数の初期化
-	public Stat NewStat(){
-		return new Stat(url, db, id, pw);
-	}
-
-	public String getPluginJarFile() {
-		return this.getPluginJarFile();
+	public Config getconfig(){
+		return config;
 	}
 
 }

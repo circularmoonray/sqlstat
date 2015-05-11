@@ -38,6 +38,7 @@ public class CSql implements TabExecutor {
 				}else if(args[0].equalsIgnoreCase("mine")){
 					for(Player player : plugin.getServer().getOnlinePlayers()){
 						stat.putMine(today, player);
+						stat.putFarming(today, player);
 					}
 					sender.sendMessage("complete insert and update into 'today' of stats");
 					return true;
@@ -61,7 +62,6 @@ public class CSql implements TabExecutor {
 	@Override
 	public List<String> onTabComplete(CommandSender arg0, Command arg1,
 			String arg2, String[] arg3) {
-		// TODO 自動生成されたメソッド・スタブ
 		return null;
 	}
 

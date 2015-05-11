@@ -1,7 +1,5 @@
 package com.github.circularmoonray.sqlstat;
 
-import static com.github.circularmoonray.sqlstat.Param.*;
-
 import java.util.HashMap;
 
 import org.bukkit.command.Command;
@@ -18,6 +16,7 @@ public class SqlStat extends JavaPlugin implements Listener {
 
 	private Config config;
 	private HashMap<String, TabExecutor> commands;
+	private String strtoday = Param.today;
 
 	public Stat stat;
 
@@ -52,9 +51,11 @@ public class SqlStat extends JavaPlugin implements Listener {
 	@EventHandler
 	public void onQuit(PlayerQuitEvent event){
 		Player player = event.getPlayer();
-		stat.putMine(today, player);
+		stat.putMine("today", player);
+		stat.putFarming("today", player);
 	}
 
+	//以下getter&setter
 	public Stat getStat(){
 		return stat;
 	}

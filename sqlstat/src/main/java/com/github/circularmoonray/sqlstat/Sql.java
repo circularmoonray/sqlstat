@@ -5,6 +5,8 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 //MySQL操作関数
@@ -16,6 +18,7 @@ public class Sql{
 	private Statement stmt = null;
 	private ResultSet result = null;
 	public static String exc;
+	private HashMap<String, String> commands;
 
 
 	Sql(String url, String db, String id, String pw){
@@ -25,6 +28,7 @@ public class Sql{
 		this.pw = pw;
 
 		String command = "";
+		commands = new HashMap<String, String>();
 		try {
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
 		} catch (InstantiationException | IllegalAccessException
@@ -101,6 +105,53 @@ public class Sql{
 		return false;
 	}
 
+	/**
+	 * 複数のコマンドをセットします。引数が無い場合、NullPointerExceptionを返します
+	 * @param key
+	 * @param s
+	 * @throws NullPointerException
+	 */
+	public void setCommands(String key, int stat)throws NullPointerException{
+		if(key.isEmpty()){
+			throw new NullPointerException("setCommands : NullException");
+		}
+
+		commands.put(key, String.valueOf(stat));
+	}
+
+
+	/**
+	 * 複数のコマンドを出力します。引数かcommandsが無い場合、NullPointerExceptionを返します
+	 * @param uuid
+	 * @param s
+	 * @throws NullPointerException
+	 */
+	public boolean insertCommands(String table, String uuid)throws NullPointerException{
+		if((table.isEmpty() || uuid.isEmpty())){
+			throw new NullPointerException("insertCommands : NullException");
+		}else if(commands.isEmpty()){
+			throw new NullPointerException("insertCommands : NotFoundCommands");
+		}
+
+		String commandf = "insert into " + table + "(";
+		String commandm = "uuid) values(";
+		String commandr = "'" + uuid + "')" + " on duplicate key update ";
+		String command = "";
+
+		//command:
+		//insert into @table(@key..., uuid) values(@s..., '@struuid')
+		// on duplicate key update @key=@s, ...
+		for(Map.Entry<String, String> com : commands.entrySet()){
+			commandf += com.getKey()   + ",";
+			commandm += com.getValue() + ",";
+			commandr += com.getKey() + "=" + com.getValue() + ",";
+		}
+
+		command = commandf + commandm + commandr.substring(0, commandr.length() - 1);
+
+		commands.clear();
+		return putCommand(command);
+	}
 
 	/**
 	 * データの挿入・更新(int)
@@ -114,23 +165,18 @@ public class Sql{
 	 */
 	public boolean insert(String table, String key, int stat, UUID uuid){
 		String command = "";
-		String struuid = uuid.toString();
-		String s = String.valueOf(stat);
+ 		String struuid = uuid.toString();
+ 		String s = String.valueOf(stat);
 
-		//command:
-		//insert into @table(@key, uuid) values(@s, '@struuid')
-		// on duplicate key update @key=@s
-		command = "insert into " +  table +
-				"(" + key + ", uuid) values(" +
-				s + ", '" + struuid + "')" +
-				" on duplicate key update " + key + "=" + s;
-		try {
-			stmt.executeUpdate(command);
-			return true;
-		} catch (SQLException e) {
-			exc = e.getMessage();
-		}
-		return false;
+ 		//command:
+ 		//insert into @table(@key, uuid) values(@stat, '@struuid')
+ 		// on duplicate key update @key=@stat
+ 		command = "insert into " +  table +
+ 				"(" + key + ", uuid) values(" +
+ 				s + ", '" + struuid + "')" +
+ 				" on duplicate key update " + key + "=" + s;
+
+ 		return putCommand(command);
 	}
 
 	/**
@@ -148,12 +194,22 @@ public class Sql{
 		String struuid = uuid.toString();
 
 		//command:
-		//insert into @table(@key, uuid) values(@s, '@struuid')
-		// on duplicate key update @key=@s
+		//insert into @table(@key, uuid) values('@s', '@struuid')
+		// on duplicate key update @key='@s'
 		command = "insert into " +  table +
 				"(" + key + ", uuid) values('" +
 				s + "', '" + struuid + "')" +
 				" on duplicate key update " + key + "='" + s + "'";
+
+		return putCommand(command);
+	}
+
+	/**
+	 * コマンド出力関数
+	 * @param command コマンド内容
+	 * @return 成否
+	 */
+	private boolean putCommand(String command){
 		try {
 			stmt.executeUpdate(command);
 			return true;
@@ -163,8 +219,8 @@ public class Sql{
 			connect(url, id, pw);
 			try {
 				stmt.executeUpdate(command);
+				return true;
 			} catch (SQLException e1) {
-				// TODO 自動生成された catch ブロック
 				e1.printStackTrace();
 			}
 		}

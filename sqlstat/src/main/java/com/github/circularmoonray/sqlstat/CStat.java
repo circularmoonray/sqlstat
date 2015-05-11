@@ -38,9 +38,6 @@ public class CStat implements TabExecutor {
 			}else if(args[0].equalsIgnoreCase("set")){
 				((Player) sender).setStatistic(Statistic.KILL_ENTITY, EntityType.ENDERMAN, 10);
 				return true;
-
-			}else{
-				return false;
 			}
 
 		}else if(args.length == 0){
@@ -49,15 +46,17 @@ public class CStat implements TabExecutor {
 		}
 
 		return false;
-
 	}
+
+
+
 
 	private void StatNonOption(CommandSender sender, Command cmd, String label,
 			String[] args) {
 
 		String s = "";
 
-		s = String.valueOf( ((Player) sender).getStatistic(Statistic.KILL_ENTITY, EntityType.ENDER_DRAGON) );
+		s = String.valueOf( ((Player) sender).getStatistic(Statistic.USE_ITEM, Material.CARROT_ITEM) );
 		sender.sendMessage("あなたの石の掘削数:" + s);
 
 	}

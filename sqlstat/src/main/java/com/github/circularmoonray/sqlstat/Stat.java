@@ -12,7 +12,6 @@ public class Stat {
 	private Sql sql;
 
 	Stat(Config config){
-
 		sql = new Sql(config.getURL(),
 				config.getDB(),
 				config.getID(),
@@ -25,48 +24,55 @@ public class Stat {
 	}
 
 	public int getStat(Player player, Material material){
-		int istat;
 		if(material.isBlock()){
-			istat = (player).getStatistic(Statistic.MINE_BLOCK, material);
-		}else{
-			istat=0;
+			return ( (player).getStatistic(Statistic.MINE_BLOCK, material) );
 		}
 
-		return istat;
+		return 0;
 	}
 
 	//掘削数をMySqlにプッシュ
 	public boolean putMine(String str, Player player){
 		UUID uuid = player.getUniqueId();
-		String s = player.getDisplayName();
 		int istat = 0;
-		sql.insert(str, "name", s, uuid);
+
+		//プレイヤー名出力
+		sql.insert(str, "name", player.getName(), uuid);
+
+		//掘った数の出力
 		istat = getStat(player, Material.STONE);
-		sql.insert(str, "stone", istat, uuid);
+		sql.setCommands("stone", istat);
 		istat = getStat(player, Material.NETHERRACK);
-		sql.insert(str, "netherrack", istat, uuid);
+		sql.setCommands("netherrack", istat);
 		istat = getStat(player, Material.DIRT);
-		sql.insert(str, "dirt", istat, uuid);
+		sql.setCommands("dirt", istat);
 		istat = getStat(player, Material.GRAVEL);
-		sql.insert(str, "gravel", istat, uuid);
+		sql.setCommands("gravel", istat);
+		istat = getStat(player, Material.LOG) + getStat(player, Material.LOG_2);
+		sql.setCommands("logs", istat);
 
-		istat = player.getStatistic(Statistic.BREAK_ITEM, Material.DIAMOND_PICKAXE);
-		sql.insert(str, "break_dPickaxe", istat, uuid);
-		istat = player.getStatistic(Statistic.USE_ITEM, Material.SEEDS);
-		sql.insert(str, "use_seed", istat, uuid);
+		//死亡数出力
+		istat = (player).getStatistic(Statistic.DEATHS);
+		sql.setCommands("death", istat);
 
-		istat = player.getStatistic(Statistic.DEATHS);
-		sql.insert(str, "death", istat, uuid);
-
-		return true;
+		//各出力データを送信
+		return sql.insertCommands(str, uuid.toString());
 	}
 
-	//破棄時の処理
-	protected void finalize(){
-		//オブジェクトが存在したら切断処理
-		if(sql != null){
-			sql.disconnect();
-			sql = null;
-		}
+	public boolean putFarming(String str, Player player){
+		UUID uuid = player.getUniqueId();
+
+		//各データをセット : ダイピ・種・ジャガイモ・人参使用数
+		sql.setCommands("use_dPickaxe",
+				(player).getStatistic(Statistic.USE_ITEM, Material.DIAMOND_PICKAXE));
+		sql.setCommands("use_seeds",
+				(player).getStatistic(Statistic.USE_ITEM, Material.SEEDS));
+		sql.setCommands("use_potate",
+				(player).getStatistic(Statistic.USE_ITEM, Material.POTATO_ITEM));
+		sql.setCommands("use_carrot",
+				(player).getStatistic(Statistic.USE_ITEM, Material.CARROT_ITEM));
+
+		//各出力データを送信
+		return sql.insertCommands(str, uuid.toString());
 	}
 }

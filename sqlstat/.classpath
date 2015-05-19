@@ -33,15 +33,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry exported="true" kind="lib" path="C:/Program Files/pleiades-e4.4-ultimate-jre_20150310/pleiades/eclipse/mysql-connector-java-5.1.35/mysql-connector-java-5.1.35/mysql-connector-java-5.1.35-bin.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Yazawa Takumi/.m2/repository/org/bukkit/bukkit/1.7.9-R0.2/bukkit-1.7.9-R0.2.jar">
-		<attributes>
-			<attribute name="maven.pomderived" value="true"/>
-			<attribute name="maven.groupId" value="org.bukkit"/>
-			<attribute name="maven.artifactId" value="bukkit"/>
-			<attribute name="maven.version" value="1.7.9-R0.2"/>
-			<attribute name="maven.scope" value="compile"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="lib" path="C:/Program Files/pleiades-e4.4-ultimate-jre_20150310/pleiades/eclipse/mysql-connector-java-5.1.35/TabAPI.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

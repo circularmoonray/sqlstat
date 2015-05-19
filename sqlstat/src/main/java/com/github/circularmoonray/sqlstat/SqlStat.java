@@ -1,24 +1,24 @@
 package com.github.circularmoonray.sqlstat;
 
-import static com.github.circularmoonray.sqlstat.Param.*;
-
 import java.util.HashMap;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class SqlStat extends JavaPlugin implements Listener {
 	public static SqlStat instance;
 
+	//コンフィグの宣言
 	private Config config;
+
+	//コマンド一覧
 	private HashMap<String, TabExecutor> commands;
-	private String strtoday = Param.today;
+
+	//集計コマンドのフラグ
+	private boolean statflag = false;
 
 	public Stat stat;
 
@@ -50,13 +50,6 @@ public class SqlStat extends JavaPlugin implements Listener {
 		getLogger().info("Disable ");
 	}
 
-	@EventHandler
-	public void onQuit(PlayerQuitEvent event){
-		Player player = event.getPlayer();
-		stat.putMine(today, player);
-		stat.putFarming(today, player);
-	}
-
 	//以下getter&setter
 	public Stat getStat(){
 		return stat;
@@ -64,6 +57,14 @@ public class SqlStat extends JavaPlugin implements Listener {
 
 	public Config getconfig(){
 		return config;
+	}
+
+	public boolean getStatFlag(){
+		return statflag;
+	}
+
+	public void setStatFlag(boolean statflag){
+		this.statflag = statflag;
 	}
 
 }

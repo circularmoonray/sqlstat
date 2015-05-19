@@ -42,5 +42,6 @@
 			<attribute name="maven.scope" value="compile"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="C:/Program Files/pleiades-e4.4-ultimate-jre_20150310/pleiades/eclipse/mysql-connector-java-5.1.35/TabAPI.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

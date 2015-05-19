@@ -2,6 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.github.circularmoonray</groupId>
   <artifactId>sqlstat</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
 
  <build>
    <plugins>
@@ -31,5 +32,4 @@
    </dependency>
  </dependencies>
 
-	<version>1.0.1</version>
 </project>

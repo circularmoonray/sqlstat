@@ -20,31 +20,41 @@ public class CSql implements TabExecutor {
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		Stat stat = plugin.getStat();
 
-		//オプションの判定
-		if(args.length > 2){
-			sender.sendMessage("引数は2つにまでにして下さい");
-			return false;
+		if(cmd.getName().equalsIgnoreCase("sql")){
 
-		//configのリロードオプション
-		}else if(args.length == 1){
-			if(args[0].equalsIgnoreCase("reload")){
-				Config.loadConfig();
-				sender.sendMessage("reload completed");
-				return true;
+			//オプションの判定
+			if(args.length > 1){
+				sender.sendMessage("引数は1つにまでにして下さい");
+				return false;
 
-			//現在ログイン中のプレイヤーの実績をSQLに書き出し
-			}else if(args[0].equalsIgnoreCase("mine")){
-				for(Player player : plugin.getServer().getOnlinePlayers()){
-					stat.putMine(today, player);
-					stat.putFarming(today, player);
+			//configのリロードオプション
+			}else if(args.length == 1){
+				if(args[0].equalsIgnoreCase("reload")){
+					Config.loadConfig();
+					sender.sendMessage("reload completed");
+					return true;
+
+				//現在ログイン中のプレイヤーの実績をSQLに書き出し
+				}else if(args[0].equalsIgnoreCase("mine")){
+					for(Player player : plugin.getServer().getOnlinePlayers()){
+						stat.putMine(today, player);
+						stat.putFarming(today, player);
+					}
+					sender.sendMessage("complete insert and update into 'today' of stats");
+					return true;
+
+				}else{
+					return false;
 				}
-				sender.sendMessage("complete insert and update into 'today' of stats");
-				return true;
 			}
+
+			sender.sendMessage("sql restart");
+			return true;
 		}
 
 		return false;
 	}
+
 
 
 

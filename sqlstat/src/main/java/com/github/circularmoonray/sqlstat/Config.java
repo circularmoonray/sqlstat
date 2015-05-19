@@ -14,13 +14,29 @@ public class Config {
 		url = "jdbc:mysql://";
 	}
 
+	public String getDB(){
+		return db;
+	}
+
+	public String getID(){
+		return id;
+	}
+
+	public String getPW(){
+		return pw;
+	}
+
+	public String getURL(){
+		return url;
+	}
+
 	public static Config loadConfig(){
 		Config tconfig = new Config();
 
 		//ファイル位置の取得
 		File configFile = new File(SqlStat.instance.getDataFolder(), "config.yml");
 
-		//コンフィグファイルが存在しない場合はコピー
+		//存在しない場合はコピー
 		if ( !configFile.exists() ) {
 			SqlStat.instance.getConfig().options().copyDefaults(true);
 			SqlStat.instance.saveConfig();
@@ -40,23 +56,6 @@ public class Config {
 		}
 
 		return tconfig;
-	}
-
-
-	public String getDB(){
-		return db;
-	}
-
-	public String getID(){
-		return id;
-	}
-
-	public String getPW(){
-		return pw;
-	}
-
-	public String getURL(){
-		return url;
 	}
 
 }

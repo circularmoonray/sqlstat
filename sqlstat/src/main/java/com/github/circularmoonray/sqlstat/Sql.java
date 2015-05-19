@@ -17,7 +17,7 @@ public class Sql{
 	private Connection con = null;
 	private Statement stmt = null;
 	private ResultSet result = null;
-	private String exc;
+	public static String exc;
 	private HashMap<String, String> commands;
 
 
@@ -216,7 +216,7 @@ public class Sql{
 		} catch (SQLException e) {
 			//接続エラーの場合は、再度接続後、コマンド実行
 			exc = e.getMessage();
-			connect(url + "/" + db, id, pw);
+			connect(url, id, pw);
 			try {
 				stmt.executeUpdate(command);
 				return true;
@@ -258,11 +258,5 @@ public class Sql{
 			e.printStackTrace();
 			return false;
 		}
-	}
-
-
-	//以下getter&setter
-	public String getError(){
-		return exc;
 	}
 }

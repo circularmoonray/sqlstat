@@ -1,7 +1,6 @@
-name: ${project.name}
+name: sqlstat
 main: com.github.circularmoonray.sqlstat.SqlStat
-version: ${project.version}
-author: moonray
+version: 0.0.1
 
 commands:
   stat:

@@ -1,7 +1,5 @@
 package com.github.circularmoonray.sqlstat;
 
-import static com.github.circularmoonray.sqlstat.Param.*;
-
 import java.util.List;
 
 import org.bukkit.Material;
@@ -11,10 +9,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
-import org.bukkit.scoreboard.DisplaySlot;
-import org.bukkit.scoreboard.Objective;
-import org.bukkit.scoreboard.Scoreboard;
-import org.bukkit.scoreboard.ScoreboardManager;
 
 public class CStat implements TabExecutor {
 	private SqlStat plugin;
@@ -25,12 +19,6 @@ public class CStat implements TabExecutor {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-
-		if(args.length == 2){
-			if(args[0].equalsIgnoreCase("start")){
-				return StatStart(sender, cmd, label, args);
-			}
-		}
 
 		if (!(sender instanceof Player)) {
 			sender.sendMessage("このコマンドはプレイヤーのみ実行できます");
@@ -60,27 +48,7 @@ public class CStat implements TabExecutor {
 		return false;
 	}
 
-	private boolean StatStart(CommandSender sender, Command cmd, String label,
-			String[] args) {
 
-		ScoreboardManager manager = plugin.getServer().getScoreboardManager();
-		Scoreboard mboard = manager.getMainScoreboard();
-		Scoreboard nboard = manager.getNewScoreboard();
-
-		Objective smine = nboard.getObjective(scoreSMine);
-		Objective emine = nboard.getObjective(scoreEMine);
-
-		Objective mine = nboard.getObjective(scoreMine);
-
-		if ( smine == null || emine == null) {
-			smine = nboard.registerNewObjective(scoreSMine, "dummy");
-			emine = nboard.registerNewObjective(scoreEMine, "dummy");
-
-			smine.setDisplaySlot(DisplaySlot.BELOW_NAME);
-		}
-
-		return false;
-	}
 
 
 	private void StatNonOption(CommandSender sender, Command cmd, String label,
@@ -115,6 +83,5 @@ public class CStat implements TabExecutor {
 		// TODO 自動生成されたメソッド・スタブ
 		return null;
 	}
-
 
 }

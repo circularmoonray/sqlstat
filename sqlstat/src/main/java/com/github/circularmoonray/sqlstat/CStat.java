@@ -62,21 +62,23 @@ public class CStat implements TabExecutor {
 
 	private boolean StatStart(CommandSender sender, Command cmd, String label,
 			String[] args) {
-		
+
 		ScoreboardManager manager = plugin.getServer().getScoreboardManager();
 		Scoreboard mboard = manager.getMainScoreboard();
 		Scoreboard nboard = manager.getNewScoreboard();
 
 		Objective smine = nboard.getObjective(scoreSMine);
 		Objective emine = nboard.getObjective(scoreEMine);
-		
+
+		Objective mine = nboard.getObjective(scoreMine);
+
 		if ( smine == null || emine == null) {
 			smine = nboard.registerNewObjective(scoreSMine, "dummy");
 			emine = nboard.registerNewObjective(scoreEMine, "dummy");
-			
+
 			smine.setDisplaySlot(DisplaySlot.BELOW_NAME);
 		}
-		
+
 		return false;
 	}
 

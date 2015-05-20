@@ -7,8 +7,11 @@ import org.bukkit.Statistic;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.scoreboard.DisplaySlot;
+import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.ScoreboardManager;
 
 public class CStat implements TabExecutor {
 	private SqlStat plugin;
@@ -20,38 +23,52 @@ public class CStat implements TabExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 
-		if (!(sender instanceof Player)) {
-			sender.sendMessage("このコマンドはプレイヤーのみ実行できます");
-			return true;
-
-		}else if(args.length > 1){
+		if(args.length > 1){
 			sender.sendMessage("引数は1つにまでにして下さい");
 			return true;
 
 		}else if(args.length == 1){
-			//statのallオプション
-			if(args[0].equalsIgnoreCase("all")){
-				StatAll(sender, cmd, label, args);
+			//集計スタート
+			if(args[0].equalsIgnoreCase("start")){
+				StatStart(sender, cmd, label, args);
 				return true;
 
-			//statのsetオプション
-			}else if(args[0].equalsIgnoreCase("set")){
-				((Player) sender).setStatistic(Statistic.KILL_ENTITY, EntityType.ENDERMAN, 10);
+			//集計データの表示
+			}else if(args[0].equalsIgnoreCase("put")){
+				StatPut(sender, cmd, label, args);
+				return true;
+				
+			}else if(args[0].equalsIgnoreCase("end")){
+				StatPut(sender, cmd, label, args);
 				return true;
 			}
-
-		}else if(args.length == 0){
-			StatNonOption(sender, cmd, label, args);
-
 		}
 
 		return false;
 	}
 
+	private void StatStart(CommandSender sender, Command cmd, String label,
+			String[] args) {
+		
+		// メインスコアボードを取得します。
+        ScoreboardManager manager = plugin.getServer().getScoreboardManager();
+        Scoreboard mboard = manager.getMainScoreboard();
+        Scoreboard nboard = manager.getMainScoreboard();
+ 
+        // オブジェクティブが既に登録されているかどうか確認し、
+        // 登録されていないなら新規作成します。
+        Objective smine = board.getObjective(OBJECTIVE_NAME);
+        
+        if ( objective == null ) {
+            objective = board.registerNewObjective(OBJECTIVE_NAME, "health");
+            objective.setDisplaySlot(DisplaySlot.BELOW_NAME);
+            objective.setDisplayName("/ 20");
+        }
+		
 
+	}
 
-
-	private void StatNonOption(CommandSender sender, Command cmd, String label,
+	private void StatPut(CommandSender sender, Command cmd, String label,
 			String[] args) {
 
 		String s = "";
@@ -61,20 +78,7 @@ public class CStat implements TabExecutor {
 
 	}
 
-	private void StatAll(CommandSender sender, Command cmd, String label,
-			String[] args) {
-
-		String s = "";
-		int istat = 0;
-
-		//オンラインプレイヤーのスコア取得
-		for(Player player : plugin.getServer().getOnlinePlayers()){
-			istat = SqlStat.instance.stat.getStat(player, Material.STONE);
-			s = player.getDisplayName() + ":" + String.valueOf(istat);
-			sender.sendMessage(s);
-		}
-
-	}
+	
 
 	@Override
 	public List<String> onTabComplete(CommandSender arg0, Command arg1,

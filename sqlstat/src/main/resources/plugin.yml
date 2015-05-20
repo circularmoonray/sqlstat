@@ -1,11 +1,11 @@
-name: sqlstat
+name: {project.name}
 main: com.github.circularmoonray.sqlstat.SqlStat
-version: 0.0.1
+version: {project.versions}
 
 commands:
   stat:
       description: This is a demo command.
-      usage: /<command> <all>
+      usage: /<command> <start | end | put>
       permission: test.stat
       permission-message: You don't have <permission>
   sql:

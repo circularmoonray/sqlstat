@@ -11,6 +11,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.github.circularmoonray.sqlstat.commands.CSql;
+import com.github.circularmoonray.sqlstat.commands.CStat;
+
 public class SqlStat extends JavaPlugin implements Listener {
 	public static SqlStat instance;
 

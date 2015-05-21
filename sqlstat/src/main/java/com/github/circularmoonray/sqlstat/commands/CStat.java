@@ -1,4 +1,4 @@
-package com.github.circularmoonray.sqlstat;
+package com.github.circularmoonray.sqlstat.commands;
 
 import java.util.List;
 
@@ -12,6 +12,8 @@ import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
+
+import com.github.circularmoonray.sqlstat.SqlStat;
 
 public class CStat implements TabExecutor {
 	private SqlStat plugin;

@@ -1,4 +1,4 @@
-package com.github.circularmoonray.sqlstat;
+package com.github.circularmoonray.sqlstat.commands;
 
 import static com.github.circularmoonray.sqlstat.Param.*;
 
@@ -8,6 +8,10 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
+
+import com.github.circularmoonray.sqlstat.Config;
+import com.github.circularmoonray.sqlstat.SqlStat;
+import com.github.circularmoonray.sqlstat.Stat;
 
 public class CSql implements TabExecutor {
 	private SqlStat plugin;

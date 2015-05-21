@@ -12,10 +12,10 @@ public class Stat {
 	private Sql sql;
 
 	Stat(Config config){
-		sql = new Sql(config.getURL(),
+		setSql(new Sql(config.getURL(),
 				config.getDB(),
 				config.getID(),
-				config.getPW());
+				config.getPW()));
 	}
 
 	//掘削数を表示
@@ -37,42 +37,52 @@ public class Stat {
 		int istat = 0;
 
 		//プレイヤー名出力
-		sql.insert(str, "name", player.getName(), uuid);
+		getSql().insert(str, "name", player.getName(), uuid);
 
 		//掘った数の出力
 		istat = getStat(player, Material.STONE);
-		sql.setCommands("stone", istat);
+		getSql().setCommands("stone", istat);
 		istat = getStat(player, Material.NETHERRACK);
-		sql.setCommands("netherrack", istat);
+		getSql().setCommands("netherrack", istat);
 		istat = getStat(player, Material.DIRT);
-		sql.setCommands("dirt", istat);
+		getSql().setCommands("dirt", istat);
 		istat = getStat(player, Material.GRAVEL);
-		sql.setCommands("gravel", istat);
+		getSql().setCommands("gravel", istat);
 		istat = getStat(player, Material.LOG) + getStat(player, Material.LOG_2);
-		sql.setCommands("logs", istat);
+		getSql().setCommands("logs", istat);
 
 		//死亡数出力
 		istat = (player).getStatistic(Statistic.DEATHS);
-		sql.setCommands("death", istat);
+		getSql().setCommands("death", istat);
 
 		//各出力データを送信
-		return sql.insertCommands(str, uuid.toString());
+		return getSql().insertCommands(str, uuid.toString());
 	}
 
 	public boolean putFarming(String str, Player player){
 		UUID uuid = player.getUniqueId();
 
 		//各データをセット : ダイピ・種・ジャガイモ・人参使用数
-		sql.setCommands("use_dPickaxe",
+		getSql().setCommands("use_dPickaxe",
 				(player).getStatistic(Statistic.USE_ITEM, Material.DIAMOND_PICKAXE));
-		sql.setCommands("use_seeds",
+		getSql().setCommands("use_seeds",
 				(player).getStatistic(Statistic.USE_ITEM, Material.SEEDS));
-		sql.setCommands("use_potate",
+		getSql().setCommands("use_potate",
 				(player).getStatistic(Statistic.USE_ITEM, Material.POTATO_ITEM));
-		sql.setCommands("use_carrot",
+		getSql().setCommands("use_carrot",
 				(player).getStatistic(Statistic.USE_ITEM, Material.CARROT_ITEM));
 
 		//各出力データを送信
-		return sql.insertCommands(str, uuid.toString());
+		return getSql().insertCommands(str, uuid.toString());
+	}
+
+	//getter & setter
+
+	public Sql getSql() {
+		return sql;
+	}
+
+	public void setSql(Sql sql) {
+		this.sql = sql;
 	}
 }

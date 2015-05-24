@@ -142,8 +142,12 @@ public class Sql{
 		//insert into @table(@key..., uuid) values(@s..., '@struuid')
 		// on duplicate key update @key=@s, ...
 		for(Map.Entry<String, String> com : commands.entrySet()){
+
+			//insert into @table(@key...,
 			commandf += com.getKey()   + ",";
+			//uuid) values(@s...,
 			commandm += com.getValue() + ",";
+			//'@struuid') on duplicate key update @key=@s, ...
 			commandr += com.getKey() + "=" + com.getValue() + ",";
 		}
 

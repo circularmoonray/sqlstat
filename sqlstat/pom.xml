@@ -4,6 +4,13 @@
   <artifactId>SqlStat</artifactId>
 
  <build>
+   <finalName>${project.artifactId}</finalName>
+   <resources>
+      <resource>
+        <directory>C:\Users\Yazawa Takumi\git\sqlstat\sqlstat\src\main\resources</directory>
+        <filtering>true</filtering>
+      </resource>
+   </resources>
    <plugins>
      <plugin>
        <groupId>org.apache.maven.plugins</groupId>
@@ -32,4 +39,10 @@
  </dependencies>
 
 	<version>1.0.1</version>
+	<name>SqlStat</name>
+	<url>https://github.com/circularmoonray/sqlstat/tree/master/sqlstat</url>
+	<organization>
+		<name>unchama co.ltd</name>
+		<url>http://stat.seichi.click/homepage/public_html/index.html</url>
+	</organization>
 </project>

@@ -45,7 +45,7 @@ public class CStat implements TabExecutor {
 				return true;
 
 			}else if(args[0].equalsIgnoreCase("end")){
-				StatPut(sender, cmd, label, args);
+				StatEnd(sender, cmd, label, args);
 				return true;
 			}
 		}
@@ -70,7 +70,7 @@ public class CStat implements TabExecutor {
 	private void StatPut(CommandSender sender, Command cmd, String label,
 			String[] args) {
 
-		if(plugin.fCount){
+		if(plugin.count != null){
 			Integer i = 1;
 			Count count = plugin.count;
 			TreeMap<Integer, UUID> mine = new TreeMap<Integer, UUID>();
@@ -101,7 +101,13 @@ public class CStat implements TabExecutor {
 
 	}
 
+	private void StatEnd(CommandSender sender, Command cmd, String label,
+			String[] args) {
+		StatPut(sender, cmd, label, args);
 
+		plugin.fCount = false;
+		plugin.count = null;
+	}
 
 	@Override
 	public List<String> onTabComplete(CommandSender arg0, Command arg1,

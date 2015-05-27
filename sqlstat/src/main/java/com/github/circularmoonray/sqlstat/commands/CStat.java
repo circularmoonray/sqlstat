@@ -85,11 +85,21 @@ public class CStat implements TabExecutor {
 			for(Map.Entry<Integer, UUID> map : mine.entrySet()){
 
 				if(i < 10){
+					String str;
+
+					try{
+						str = plugin.getServer().getPlayer(map.getValue()).getName();
+					}catch(NullPointerException e){
+						str = plugin.getServer().getOfflinePlayer(map.getValue()).getName();
+					}
+
 					sendEveryMessage(i.toString() +
 							"位 " +
-							plugin.getServer().getPlayer(map.getValue()).getName() +
+							str +
 							" : " +
 							map.getKey().toString());
+				}else{
+					break;
 				}
 
 				i++;

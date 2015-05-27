@@ -1,11 +1,18 @@
 package com.github.circularmoonray.sqlstat;
 
+import static com.github.circularmoonray.sqlstat.Param.*;
+
 import java.util.HashMap;
 
+import org.bukkit.Material;
+import org.bukkit.Statistic;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.github.circularmoonray.sqlstat.commands.CSql;
@@ -38,7 +45,7 @@ public class SqlStat extends JavaPlugin implements Listener {
 		//コンフィグのロード
 		config = Config.loadConfig();
 		stat = new Stat(config);
-		getLogger().info("config load completed");
+		getLogger().info("config load completed" + config.getURL() + config.getDB());
 
 		//コマンドの登録
 		commands = new HashMap<String, TabExecutor>();
@@ -46,6 +53,7 @@ public class SqlStat extends JavaPlugin implements Listener {
 		commands.put("stat", new CStat(this));
 
 		//リスナーの登録
+		this.getServer().getPluginManager().registerEvents(new LJoinQuit(this), this);
 		this.getServer().getPluginManager().registerEvents(this, this);
 	}
 
@@ -66,6 +74,20 @@ public class SqlStat extends JavaPlugin implements Listener {
 
 	public Config getconfig(){
 		return config;
+	}
+
+	@EventHandler
+	public void onPlayerQuit(PlayerQuitEvent event){
+		Player player = event.getPlayer();
+
+		stat.putMine(today, player);
+		stat.putFarming(today, player);
+
+		//集計フラグがオンだった場合、石の集計
+		if(fCount){
+
+			count.setEmine(player, (player).getStatistic(Statistic.MINE_BLOCK, Material.STONE));
+		}
 	}
 
 }

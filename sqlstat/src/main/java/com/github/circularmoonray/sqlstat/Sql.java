@@ -22,7 +22,7 @@ public class Sql{
 
 
 	Sql(String url, String db, String id, String pw){
-		this.url = url;
+		this.url = url +  "/" + db;
 		this.db = db;
 		this.id = id;
 		this.pw = pw;
@@ -39,22 +39,6 @@ public class Sql{
 		//sql鯖への接続とdb作成
 		connect(url, id, pw);
 
-		//dbへの接続。失敗時には作成
-		command = "USE " + db;
-
-		try {
-			stmt.execute(command);
-		} catch (SQLException e) {
-			exc = e.getMessage();
-			createDB(db);
-			connect(url, id, pw);
-			try {
-				stmt.execute(command);
-			} catch (SQLException e1) {
-				// TODO 自動生成された catch ブロック
-				e1.printStackTrace();
-			}
-		}
 	}
 
 	/**

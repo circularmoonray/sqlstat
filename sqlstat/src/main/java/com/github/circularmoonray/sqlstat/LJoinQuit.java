@@ -31,7 +31,7 @@ public class LJoinQuit implements Listener {
 	}
 
 	@EventHandler
-	public void onQuit(PlayerQuitEvent event){
+	public void onPlayerQuit(PlayerQuitEvent event){
 		Player player = event.getPlayer();
 		Stat stat = plugin.getStat();
 

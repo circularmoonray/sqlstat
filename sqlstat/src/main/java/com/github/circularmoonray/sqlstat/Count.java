@@ -1,5 +1,6 @@
 package com.github.circularmoonray.sqlstat;
 
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.TreeMap;
@@ -21,25 +22,37 @@ public class Count {
 
 	//スタート時の集計データsmineに値を挿入
 	public int setSmine(Player player, int param){
-		return setMine(smine, player.getUniqueId(), param);
+		return setSMine(smine, player.getUniqueId(), param);
 	}
 	public int setSmine(UUID uuid, int param){
-		return setMine(smine, uuid, param);
+		return setSMine(smine, uuid, param);
 	}
 
 	//スタート時の集計データemineに値を挿入
 	public int setEmine(Player player, int param){
-		return setMine(emine, player.getUniqueId(), param);
+		return setEMine(emine, player.getUniqueId(), param);
 	}
 	public int setEmine(UUID uuid, int param){
-		return setMine(emine, uuid, param);
+		return setEMine(emine, uuid, param);
 	}
 
 	//初期値はNULLが返されるので、NULLの場合は、-1を返す
-	private int setMine(HashMap<UUID, Integer> mine, UUID uuid, int param){
-		try{
+	private int setSMine(HashMap<UUID, Integer> mine, UUID uuid, int param){
+		if (!mine.containsKey(uuid)) {
+			try {
+				return mine.put(uuid, param);
+			} catch (NullPointerException e) {
+				return -1;
+			}
+		}
+
+		return -1;
+	}
+
+	private int setEMine(HashMap<UUID, Integer> mine, UUID uuid, int param){
+		try {
 			return mine.put(uuid, param);
-		}catch(NullPointerException e){
+		} catch (NullPointerException e) {
 			return -1;
 		}
 	}
@@ -52,7 +65,11 @@ public class Count {
 	public TreeMap<Integer, UUID> calcDiff() throws NullPointerException{
 
 		//計算結果を格納(TreeMapの為自動ソートされる)
-		TreeMap<Integer, UUID> mine = new TreeMap<Integer, UUID>();
+		TreeMap<Integer, UUID> mine = new TreeMap<Integer, UUID>( new Comparator<Integer>() {
+	        public int compare(Integer m, Integer n){
+	            return ((Integer)m).compareTo(n) * -1;
+	        }
+	    });
 
 		int diff = 0;
 		UUID uuid;

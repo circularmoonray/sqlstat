@@ -65,7 +65,7 @@ public class Stat {
 		//各データをセット : ダイピ・種・ジャガイモ・人参使用数
 		getSql().setCommands("use_dPickaxe",
 				(player).getStatistic(Statistic.USE_ITEM, Material.DIAMOND_PICKAXE));
-		getSql().setCommands("use_seeds",
+		getSql().setCommands("use_seed",
 				(player).getStatistic(Statistic.USE_ITEM, Material.SEEDS));
 		getSql().setCommands("use_potate",
 				(player).getStatistic(Statistic.USE_ITEM, Material.POTATO_ITEM));

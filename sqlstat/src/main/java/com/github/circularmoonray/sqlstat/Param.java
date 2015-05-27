@@ -4,9 +4,9 @@ public class Param {
 
 	private Param(){}
 
+	//MySQL内のテーブル名
 	public static final String today = "today";
-	public static final String yesday = "yesday";
-	public static final String limit = "limit";
+	public static final String past = "past";
 
 	//集計コマンド用のスコアボード名
 	public static final String smine = "smine";

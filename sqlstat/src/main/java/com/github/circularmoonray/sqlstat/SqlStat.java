@@ -8,6 +8,7 @@ import org.bukkit.command.TabExecutor;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.github.circularmoonray.sqlstat.commands.CAddPerms;
 import com.github.circularmoonray.sqlstat.commands.CSql;
 import com.github.circularmoonray.sqlstat.commands.CStat;
 
@@ -44,6 +45,7 @@ public class SqlStat extends JavaPlugin implements Listener {
 		commands = new HashMap<String, TabExecutor>();
 		commands.put("sql", new CSql(this));
 		commands.put("stat", new CStat(this));
+		commands.put("addperms", new CAddPerms(this));
 
 		//リスナーの登録
 		this.getServer().getPluginManager().registerEvents(new LJoinQuit(this), this);

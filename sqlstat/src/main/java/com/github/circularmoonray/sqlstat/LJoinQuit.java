@@ -28,6 +28,9 @@ public class LJoinQuit implements Listener {
 
 			count.setSmine(player, (player).getStatistic(Statistic.MINE_BLOCK, Material.STONE));
 		}
+
+		//ランク判定
+		calcRankBorder(event);
 	}
 
 	@EventHandler
@@ -44,6 +47,46 @@ public class LJoinQuit implements Listener {
 
 			count.setEmine(player, (player).getStatistic(Statistic.MINE_BLOCK, Material.STONE));
 		}
+	}
+
+
+	private void calcRankBorder(PlayerJoinEvent event) {
+		Player player = event.getPlayer();
+		Config config = plugin.getconfig();
+		Integer level = 0;
+		String name = player.getDisplayName();
+
+		level += (player).getStatistic(Statistic.MINE_BLOCK, Material.STONE) *
+				config.getResultset().get("stone");
+		level += (player).getStatistic(Statistic.MINE_BLOCK, Material.NETHERRACK) *
+				config.getResultset().get("netherrack");
+		level += (player).getStatistic(Statistic.MINE_BLOCK, Material.DIRT) *
+				config.getResultset().get("dirt");
+		level += (player).getStatistic(Statistic.MINE_BLOCK, Material.GRAVEL) *
+				config.getResultset().get("gravel");
+		level += ((player).getStatistic(Statistic.MINE_BLOCK, Material.LOG) +
+				(player).getStatistic(Statistic.MINE_BLOCK, Material.LOG_2)) *
+				config.getResultset().get("log");
+		level += (player).getStatistic(Statistic.USE_ITEM, Material.SEEDS) *
+				config.getResultset().get("seed");
+		level += (player).getStatistic(Statistic.USE_ITEM, Material.POTATO_ITEM) *
+				config.getResultset().get("potate");
+		level += (player).getStatistic(Statistic.USE_ITEM, Material.CARROT_ITEM) *
+				config.getResultset().get("carrot");
+
+		//比較対象はツリーマップなので、最小値から順に比べ、整地力に応じて設定する
+		for(Integer i : config.getRankset().keySet()){
+			if(level >= i){
+				//プレイヤーネームの設定
+				name = config.getRankset().get(i).getName(player);
+				//権限の付与
+				config.getRankset().get(i).setPermissions(player.addAttachment(plugin), player);
+			}else{
+				break;
+			}
+		}
+
+		player.setDisplayName(name);
 	}
 
 }

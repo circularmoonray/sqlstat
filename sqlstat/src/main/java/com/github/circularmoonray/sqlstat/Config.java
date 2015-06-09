@@ -4,9 +4,8 @@ import static com.github.circularmoonray.sqlstat.Param.*;
 
 import java.io.File;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+import java.util.TreeMap;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -16,17 +15,16 @@ public class Config {
 	private String pw;
 	private String url;
 	private HashMap<String, Integer> resultset;
-	private List<String> rank;
-	private Set<String> keys;
+	private TreeMap<Integer, Rank> rankset;
 
 	Config(){
 		url = "jdbc:mysql://";
 		resultset = new HashMap<String, Integer>();
+		rankset = new TreeMap<Integer, Rank>();
 	}
 
 	public static Config loadConfig(){
 		Config tconfig = new Config();
-		tconfig.keys = new HashSet<String>();
 
 		//ファイル位置の取得
 		File configFile = new File(SqlStat.instance.getDataFolder(), "config.yml");
@@ -51,11 +49,15 @@ public class Config {
 		}
 
 		for (String str : statlist) {
-			tconfig.getResultset().put(str, config.getInt(str));
+			tconfig.resultset.put(str, config.getInt(str));
 		}
 
 		for (String key : config.getConfigurationSection("rank").getKeys(false)) {
-			tconfig.keys.add(key);
+			Integer border = config.getInt("rank." + key + ".border");
+			String name = config.getString("rank." + key + ".name");
+			List<String> permissions = config.getStringList("rank." + key + ".permission");
+
+			tconfig.rankset.put(border, new Rank(name, permissions));
 		}
 
 		return tconfig;
@@ -81,12 +83,8 @@ public class Config {
 		return resultset;
 	}
 
-	public List<String> getRank() {
-		return rank;
-	}
-
-	public Set<String> getKeys(){
-		return keys;
+	public TreeMap<Integer, Rank> getRankset() {
+		return rankset;
 	}
 
 }

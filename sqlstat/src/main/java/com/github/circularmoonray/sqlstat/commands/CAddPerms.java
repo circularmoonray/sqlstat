@@ -43,10 +43,7 @@ public class CAddPerms implements TabExecutor {
 				return true;
 
 			}else if (args[0].equalsIgnoreCase("list")) {
-				sender.sendMessage("put list");
-				for(String str : plugin.getconfig().getKeys()){
-					sender.sendMessage(str);
-				}
+				sender.sendMessage("change name");
 				Player player = (Player) sender;
 				player.setDisplayName("&b" + sender.getName() + "&f");
 				return true;

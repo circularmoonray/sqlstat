@@ -42,6 +42,8 @@ public class Stat {
 		//掘った数の出力
 		istat = getStat(player, Material.STONE);
 		getSql().setCommands("stone", istat);
+		istat = getStat(player, Material.SAND);
+		getSql().setCommands("sand", istat);
 		istat = getStat(player, Material.NETHERRACK);
 		getSql().setCommands("netherrack", istat);
 		istat = getStat(player, Material.DIRT);
@@ -50,6 +52,8 @@ public class Stat {
 		getSql().setCommands("gravel", istat);
 		istat = getStat(player, Material.LOG) + getStat(player, Material.LOG_2);
 		getSql().setCommands("logs", istat);
+		istat = getStat(player, Material.LOG) + getStat(player, Material.OBSIDIAN);
+		getSql().setCommands("obsidian", istat);
 
 		//死亡数出力
 		istat = (player).getStatistic(Statistic.DEATHS);

@@ -25,10 +25,10 @@ rank:
     name: '[&b%name%&f]'
     permission:
       - 'tp'
-      - 'worldedit'
+      - 'worldedit.*'
   2:
     border: 120
     name: '[&b%name%&f]'
     permission:
       - 'tp'
-      - 'worldedit'
+      - 'worldedit.*'

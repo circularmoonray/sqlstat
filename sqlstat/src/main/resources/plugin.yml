@@ -23,4 +23,4 @@ commands:
 permissions:
   sqlstat.addperms:
     description: All players can use to this command. add permission "anyname".
-    default: true
+    default: op

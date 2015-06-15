@@ -14,12 +14,12 @@ public class Config {
 	private String id;
 	private String pw;
 	private String url;
-	private HashMap<String, Integer> resultset;
+	private HashMap<String, Float> resultset;
 	private TreeMap<Integer, Rank> rankset;
 
 	Config(){
 		url = "jdbc:mysql://";
-		resultset = new HashMap<String, Integer>();
+		resultset = new HashMap<String, Float>();
 		rankset = new TreeMap<Integer, Rank>();
 	}
 
@@ -49,7 +49,7 @@ public class Config {
 		}
 
 		for (String str : statlist) {
-			tconfig.resultset.put(str, config.getInt(str));
+			tconfig.resultset.put(str, (float)config.getInt(str));
 		}
 
 		for (String key : config.getConfigurationSection("rank").getKeys(false)) {
@@ -79,7 +79,7 @@ public class Config {
 		return url;
 	}
 
-	public HashMap<String, Integer> getResultset() {
+	public HashMap<String, Float> getResultset() {
 		return resultset;
 	}
 

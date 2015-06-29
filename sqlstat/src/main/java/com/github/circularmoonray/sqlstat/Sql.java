@@ -22,13 +22,13 @@ public class Sql{
 
 
 	Sql(String url, String db, String id, String pw){
-		this.url = url +  "/" + db;
+		this.url = url;
 		this.db = db;
 		this.id = id;
 		this.pw = pw;
 
-		String command = "";
 		commands = new HashMap<String, String>();
+
 		try {
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
 		} catch (InstantiationException | IllegalAccessException
@@ -37,7 +37,7 @@ public class Sql{
 		}
 
 		//sql鯖への接続とdb作成
-		connect(url, id, pw);
+		connect();
 
 	}
 
@@ -49,10 +49,15 @@ public class Sql{
 	 * @param pw ユーザーPW
 	 * @return
 	 */
-	private boolean connect(String url, String id, String pw){
+	private boolean connect(){
 		try {
+			if(stmt != null && !stmt.isClosed()){
+				stmt.close();
+				con.close();
+			}
 			con = (Connection) DriverManager.getConnection(url, id, pw);
 			stmt = con.createStatement();
+			stmt.executeQuery("use " + db);
 	    } catch (SQLException e) {
 	    	e.printStackTrace();
 	    	return false;
@@ -196,6 +201,7 @@ public class Sql{
 	 * コマンド出力関数
 	 * @param command コマンド内容
 	 * @return 成否
+	 * @throws SQLException
 	 */
 	private boolean putCommand(String command){
 		try {
@@ -203,8 +209,10 @@ public class Sql{
 			return true;
 		} catch (SQLException e) {
 			//接続エラーの場合は、再度接続後、コマンド実行
+			java.lang.System.out.println("接続に失敗しました。再接続します。");
 			exc = e.getMessage();
-			connect(url, id, pw);
+			connect();
+			e.printStackTrace();
 			try {
 				stmt.executeUpdate(command);
 				return true;

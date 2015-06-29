@@ -12,10 +12,10 @@ public class Stat {
 	private Sql sql;
 
 	Stat(Config config){
-		setSql(new Sql(config.getURL(),
+		sql = new Sql(config.getURL(),
 				config.getDB(),
 				config.getID(),
-				config.getPW()));
+				config.getPW());
 	}
 
 	//掘削数を表示
@@ -37,56 +37,48 @@ public class Stat {
 		int istat = 0;
 
 		//プレイヤー名出力
-		getSql().insert(str, "name", player.getName(), uuid);
+		sql.insert(str, "name", player.getName(), uuid);
 
 		//掘った数の出力
 		istat = getStat(player, Material.STONE);
-		getSql().setCommands("stone", istat);
+		sql.setCommands("stone", istat);
 		istat = getStat(player, Material.SAND);
-		getSql().setCommands("sand", istat);
+		sql.setCommands("sand", istat);
 		istat = getStat(player, Material.NETHERRACK);
-		getSql().setCommands("netherrack", istat);
+		sql.setCommands("netherrack", istat);
 		istat = getStat(player, Material.DIRT);
-		getSql().setCommands("dirt", istat);
+		sql.setCommands("dirt", istat);
 		istat = getStat(player, Material.GRAVEL);
-		getSql().setCommands("gravel", istat);
+		sql.setCommands("gravel", istat);
 		istat = getStat(player, Material.LOG) + getStat(player, Material.LOG_2);
-		getSql().setCommands("logs", istat);
-		istat = getStat(player, Material.LOG) + getStat(player, Material.OBSIDIAN);
-		getSql().setCommands("obsidian", istat);
+		sql.setCommands("logs", istat);
+		istat = getStat(player, Material.OBSIDIAN);
+		sql.setCommands("obsidian", istat);
 
 		//死亡数出力
 		istat = (player).getStatistic(Statistic.DEATHS);
-		getSql().setCommands("death", istat);
+		sql.setCommands("death", istat);
 
 		//各出力データを送信
-		return getSql().insertCommands(str, uuid.toString());
+		return sql.insertCommands(str, uuid.toString());
 	}
 
 	public boolean putFarming(String str, Player player){
 		UUID uuid = player.getUniqueId();
 
 		//各データをセット : ダイピ・種・ジャガイモ・人参使用数
-		getSql().setCommands("use_dPickaxe",
+		sql.setCommands("use_dPickaxe",
 				(player).getStatistic(Statistic.USE_ITEM, Material.DIAMOND_PICKAXE));
-		getSql().setCommands("use_seed",
+		sql.setCommands("use_seed",
 				(player).getStatistic(Statistic.USE_ITEM, Material.SEEDS));
-		getSql().setCommands("use_potate",
+		sql.setCommands("use_potate",
 				(player).getStatistic(Statistic.USE_ITEM, Material.POTATO_ITEM));
-		getSql().setCommands("use_carrot",
+		sql.setCommands("use_carrot",
 				(player).getStatistic(Statistic.USE_ITEM, Material.CARROT_ITEM));
 
 		//各出力データを送信
-		return getSql().insertCommands(str, uuid.toString());
+		return sql.insertCommands(str, uuid.toString());
 	}
 
 	//getter & setter
-
-	public Sql getSql() {
-		return sql;
-	}
-
-	public void setSql(Sql sql) {
-		this.sql = sql;
-	}
 }

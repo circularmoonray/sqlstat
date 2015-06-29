@@ -36,7 +36,7 @@ public class SqlStat extends JavaPlugin implements Listener {
 	public void onEnable(){
 		instance = this;
 
-		//コンフィグのロード
+		//コンフィグとjavaドライバーのロード
 		config = Config.loadConfig();
 		stat = new Stat(config);
 		getLogger().info("config load completed" + config.getURL() + config.getDB());
